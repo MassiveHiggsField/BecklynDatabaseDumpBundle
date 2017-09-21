@@ -6,21 +6,18 @@ namespace Becklyn\DatabaseDumpBundle\Service;
 use Becklyn\DatabaseDumpBundle\Entity\DatabaseConnection;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\DependencyInjection\ContainerAware;
 
-class DatabaseConfigurationService extends ContainerAware
+class DatabaseConfigurationService
 {
     /**
      * @var Registry
      */
     private $doctrine;
 
-
     /**
      * @var array
      */
     private $connectionIdentifiers;
-
 
     /**
      * @var string
@@ -41,7 +38,6 @@ class DatabaseConfigurationService extends ContainerAware
         $this->connectionIdentifiers = $connectionIdentifiers;
         $this->backupPath            = !empty($backupPath) ? $backupPath : '';
     }
-
 
     /**
      * Returns all database connections that should be backed up by searching the configuration:
