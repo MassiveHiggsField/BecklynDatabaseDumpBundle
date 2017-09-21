@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Helper\Table;
 
 /**
  * Dumps the given Databases via CLI
@@ -209,7 +210,8 @@ class DumpCommand extends ContainerAwareCommand
         }
 
         // Print a nice table with the database name and the actual target file path
-        $this->getHelper('table')
+        $table = new Table($output);
+        $table
              ->setHeaders(['Database', 'Connection', 'Backup file'])
              ->setRows($rows)
              ->render($output);
