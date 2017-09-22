@@ -117,7 +117,7 @@ class DumpCommand extends ContainerAwareCommand
 
             try
             {
-                $dumpResult = $dumper->dump($connection);
+                $dumpResult = $dumper->dump($connection, (bool)$input->getOption('no-lock'));
 
                 if ($dumpResult['success'])
                 {

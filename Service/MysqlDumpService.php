@@ -21,14 +21,14 @@ class MysqlDumpService
      * Performs the actual backup operation for the given MySQL DatabaseConnection
      *
      * @param DatabaseConnection $connection
+     * @param bool $noLockTables
      *
      * @return array
-     *
+     * @throws BackupDeletionException
      * @throws DirectoryCreationException
      * @throws InvalidConnectionException
      * @throws InvalidConnectionTypeException
      * @throws NullConnectionException
-     * @throws BackupDeletionException
      */
     public function dump (DatabaseConnection $connection, $noLockTables = false)
     {
