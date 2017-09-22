@@ -4,6 +4,7 @@ namespace Becklyn\DatabaseDumpBundle\Command;
 
 use Becklyn\DatabaseDumpBundle\Entity\DatabaseConnection;
 use Becklyn\DatabaseDumpBundle\Exception\MysqlDumpException;
+use Becklyn\DatabaseDumpBundle\Service\MysqlDumpService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +39,14 @@ class DumpCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 "The folder path where the .sql file will be saved. Defaults to '%kernel.root_dir%/var/db_backups/'.",
                 null
-            );
+            )
+            ->addOption(
+                'no-lock',
+                'l',
+                InputOption::VALUE_NONE,
+                "Don't add --lock-tables to mysqldump command",
+                null
+            );;
     }
 
 
@@ -50,6 +58,7 @@ class DumpCommand extends ContainerAwareCommand
      */
     protected function execute (InputInterface $input, OutputInterface $output)
     {
+        /** @var MysqlDumpService $dumper */
         $dumper       = $this->getContainer()->get('becklyn.db_dump.dump');
         $dumperConfig = $this->getContainer()->get('becklyn.db_dump.configuration');
 

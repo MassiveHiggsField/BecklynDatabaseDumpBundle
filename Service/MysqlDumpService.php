@@ -2,7 +2,6 @@
 
 namespace Becklyn\DatabaseDumpBundle\Service;
 
-
 use Becklyn\DatabaseDumpBundle\Entity\DatabaseConnection;
 use Becklyn\DatabaseDumpBundle\Exception\BackupDeletionException;
 use Becklyn\DatabaseDumpBundle\Exception\DirectoryCreationException;
@@ -31,7 +30,7 @@ class MysqlDumpService
      * @throws NullConnectionException
      * @throws BackupDeletionException
      */
-    public function dump (DatabaseConnection $connection)
+    public function dump (DatabaseConnection $connection, $noLockTables = false)
     {
         if (is_null($connection))
         {
@@ -53,8 +52,9 @@ class MysqlDumpService
             throw new DirectoryCreationException("Permission denied. Could not create directory {$connection->getBackupPath()}");
         }
 
+        $lockTables = ($noLockTables) ? '' : '--lock-all-tables';
         $process = new Process(sprintf(
-            'mysqldump --user="%s" --password="%s" --host="%s" --lock-all-tables "%s" | gzip > "%s"',
+            'mysqldump --user="%s" --password="%s" --host="%s" ' . $lockTables . ' "%s" | gzip > "%s"',
             $connection->getUsername(),
             $connection->getPassword(),
             $connection->getHost(),
@@ -62,7 +62,6 @@ class MysqlDumpService
             $connection->getBackupPath()
         ));
         $process->run();
-
 
         // We need to determine ourselves whether mysqldump has raised an error
         // as its return code is unreliable due to the fact that it's always returning 0
